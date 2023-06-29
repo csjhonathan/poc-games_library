@@ -1,6 +1,6 @@
 export type PGQuery = {
   text : string;
-  values? : Array<string|number>
+  values? : Array<string|number| boolean>
 }
 
 export type UserLib = {
@@ -10,6 +10,11 @@ export type UserLib = {
   platform: string;
   grade: string;
   finished: boolean;
+}
+
+export type LibInsertion = {
+  playerId: number;
+  gameId: number;
 }
 
 export type GameInsert = {
@@ -30,4 +35,14 @@ export type PlatformInsert = {
 }
 
 export type PlayerInsert = PlatformInsert;
+
 export type Player = Platform
+
+export type LibUpdate = {
+  grade:number;
+  status:boolean;
+}
+
+export type Grade = {
+  name : string
+}

@@ -1,17 +1,17 @@
 import db from '@/database/connection';
-import { PGQuery, Platform } from '@/protocols/protocols';
+import { Grade, PGQuery } from '@/protocols/protocols';
 
-export async function createPlatform(name : string) : Promise<number>{
+export async function createGrade(name : string) : Promise<number>{
 
   const query : PGQuery = {
     text:`
-          INSERT INTO platforms (name)
+          INSERT INTO grades (name)
           SELECT $1
           WHERE
             NOT EXISTS (
               SELECT *
-              FROM platforms
-              WHERE platforms.name = $1
+              FROM grades
+              WHERE grades.name = $1
             );
         `,
     values : [name]
@@ -22,12 +22,11 @@ export async function createPlatform(name : string) : Promise<number>{
   return rowCount;
 }
 
-export async function getPlatforms() : Promise<Platform[]>{
+export async function getGrades() : Promise<Grade[]>{
 
   const query : PGQuery = {
     text:`
-          SELECT platforms.id, platforms.name AS platform
-          FROM platforms;
+          SELECT * FROM grades;
         `
   };
 
@@ -35,4 +34,3 @@ export async function getPlatforms() : Promise<Platform[]>{
 
   return rows;
 }
-
