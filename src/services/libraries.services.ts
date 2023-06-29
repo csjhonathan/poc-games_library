@@ -1,4 +1,4 @@
-import { UserLib } from '@/protocols/db.query.protocol';
+import { UserLib } from '@/protocols/protocols';
 import * as librariesRepository from '@/repositories/libraries.repository';
 
 export function getLibraries() : Promise<UserLib[]>{

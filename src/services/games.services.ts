@@ -1,4 +1,4 @@
-import { Game } from '@/protocols/db.query.protocol';
+import { Game } from '@/protocols/protocols';
 import * as gamesRepository from '@/repositories/games.repository';
 
 export async function createGame(name:string, platformId:number) : Promise<number> {

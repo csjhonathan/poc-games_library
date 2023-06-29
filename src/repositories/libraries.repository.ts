@@ -1,5 +1,5 @@
 import db from '@/database/connection';
-import { PGQuery, UserLib } from '@/protocols/db.query.protocol';
+import { PGQuery, UserLib } from '@/protocols/protocols';
 import { QueryResult } from 'pg';
 
 export async function getLibraries() : Promise<UserLib[]>{

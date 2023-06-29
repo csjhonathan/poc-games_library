@@ -1,5 +1,5 @@
 import db from '@/database/connection';
-import { Game, PGQuery } from '@/protocols/db.query.protocol';
+import { Game, PGQuery } from '@/protocols/protocols';
 
 export async function createGame(name : string, platformId : number) : Promise<number>{
 

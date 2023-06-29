@@ -1,4 +1,4 @@
-import { GameInsert } from '@/protocols/db.query.protocol';
+import { GameInsert } from '@/protocols/protocols';
 import Joi from 'joi';
 
 export const gameSchema = Joi.object<GameInsert>({
