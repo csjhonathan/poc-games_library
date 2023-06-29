@@ -1,6 +1,6 @@
 export type PGQuery = {
   text : string;
-  values? :string[]
+  values? : Array<string|number>
 }
 
 export type UserLib = {
@@ -10,4 +10,15 @@ export type UserLib = {
   platform: string;
   grade: string;
   finished: boolean;
+}
+
+export type GameInsert = {
+  name: string;
+  platformId: number
+}
+
+export type Game = {
+  id:number;
+  name: string;
+  platform: string;
 }
