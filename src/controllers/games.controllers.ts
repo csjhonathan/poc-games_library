@@ -3,10 +3,13 @@ import { GameInsert } from '@/protocols/protocols';
 import { Request, Response } from 'express';
 
 export async function createGame(req:Request, res:Response): Promise<void> {
-
-    const {name, platformId } = req.body as GameInsert;
-    await gamesService.createGame(name, platformId);
-    res.status(201).send({message:'Jogo inserido com sucesso'});
+    try {
+        const {name, platformId } = req.body as GameInsert;
+        await gamesService.createGame(name, platformId);
+        res.status(201).send({message:'Jogo inserido com sucesso'});
+    } catch (error) {
+        res.status(409).send(error.message);
+    }
 }
 
 export async function getGames(req:Request, res:Response): Promise<void> {

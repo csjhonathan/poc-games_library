@@ -28,3 +28,6 @@ export type Platform = Omit<Game, 'platform'>
 export type PlatformInsert = {
   name : string
 }
+
+export type PlayerInsert = PlatformInsert;
+export type Player = Platform
