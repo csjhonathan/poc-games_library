@@ -1,13 +1,20 @@
-import { Platform } from '@/protocols/protocols';
 import * as platformsRepository from '@/repositories/platforms.repository';
 
-export async function createPlatform(name:string) : Promise<void> {
-  const result = await platformsRepository.createPlatform(name);
-  if(!result){
+async function getPlatformByName(name:string) {
+  return await platformsRepository.getPlatformByName(name);
+}
+export async function createPlatform(name:string){
+  const platformExists = await getPlatformByName(name);
+
+  if(platformExists){
     throw {message:'Esta plataforma ja está cadastrada!'};
   }
+
+  const result = await platformsRepository.createPlatform(name);
+
+  return result;
 }
 
-export async function getPlatforms() : Promise<Platform[]> {
-  return platformsRepository.getPlatforms();
+export async function getPlatforms(){
+  return platformsRepository.getPlatform();
 }

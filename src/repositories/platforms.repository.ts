@@ -1,38 +1,29 @@
-import {db} from '@/database/connection';
-import { PGQuery, Platform } from '@/protocols/protocols';
+import { prisma } from '@/database/connection';
 
-export async function createPlatform(name : string) : Promise<number>{
+export async function createPlatform(name : string){
 
-  const query : PGQuery = {
-    text:`
-          INSERT INTO platforms (name)
-          SELECT $1
-          WHERE
-            NOT EXISTS (
-              SELECT *
-              FROM platforms
-              WHERE platforms.name = $1
-            );
-        `,
-    values : [name]
-  };
+  const platform = await prisma.platform.create({
+    data : {
+      name,
+    }
+  });
 
-  const {rowCount} = await db.query(query);
+  return platform;
 
-  return rowCount;
 }
 
-export async function getPlatforms() : Promise<Platform[]>{
+export async function getPlatformByName(name:string) {
+  const platform = await prisma.platform.findFirst({
+    where: {
+      name,
+    },
+  });
 
-  const query : PGQuery = {
-    text:`
-          SELECT platforms.id, platforms.name AS platform
-          FROM platforms;
-        `
-  };
+  return platform;
+}
 
-  const {rows} = await db.query(query);
-
-  return rows;
+export async function getPlatform(){
+  const platforms = await prisma.platform.findMany();
+  return platforms;
 }
 
