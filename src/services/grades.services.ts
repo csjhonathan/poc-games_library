@@ -1,15 +1,19 @@
-import { Grade } from '@/protocols/protocols';
 import * as gradesRepository from '@/repositories/grades.repository';
 
-export async function createGrade(name:string) : Promise<number> {
-  const result = await gradesRepository.createGrade(name);
-  if(!result){
+async function getGradeByName(name:string) {
+  return await gradesRepository.getGradeByName(name);
+}
+export async function createGrade(name:string) {
+  const gradeExists = await getGradeByName(name);
+
+  if(gradeExists){
     throw {message:'Esta nota já existe!'};
   }
 
+  const result = await gradesRepository.createGrade(name);
   return result;
 }
 
-export async function getGrades() : Promise<Grade[]> {
+export async function getGrades() {
   return gradesRepository.getGrades();
 }

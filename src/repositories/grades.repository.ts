@@ -1,36 +1,27 @@
-import {db} from '@/database/connection';
+import {db, prisma} from '@/database/connection';
 import { Grade, PGQuery } from '@/protocols/protocols';
 
-export async function createGrade(name : string) : Promise<number>{
+export async function createGrade(name : string){
+  const grade = await prisma.grade.create({
+    data : {
+      name,
+    }
+  });
 
-  const query : PGQuery = {
-    text:`
-          INSERT INTO grades (name)
-          SELECT $1
-          WHERE
-            NOT EXISTS (
-              SELECT *
-              FROM grades
-              WHERE grades.name = $1
-            );
-        `,
-    values : [name]
-  };
-
-  const {rowCount} = await db.query(query);
-
-  return rowCount;
+  return grade;
 }
 
-export async function getGrades() : Promise<Grade[]>{
+export async function getGradeByName(name:string) {
+  const grade = await prisma.grade.findFirst({
+    where: {
+      name,
+    },
+  });
 
-  const query : PGQuery = {
-    text:`
-          SELECT * FROM grades;
-        `
-  };
+  return grade;
+}
 
-  const {rows} = await db.query(query);
-
-  return rows;
+export async function getGrades(){
+  const grades = await prisma.grade.findMany();
+  return grades;
 }
