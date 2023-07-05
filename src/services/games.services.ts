@@ -1,15 +1,30 @@
-import { Game } from '@/protocols/protocols';
 import * as gamesRepository from '@/repositories/games.repository';
 
-export async function createGame(name:string, platformId:number) : Promise<number> {
-  const result = await gamesRepository.createGame(name , platformId);
-  if(!result){
+async function getGameByPlatformAndTitle(title:string, platformId: number) {
+  const game = await gamesRepository.getGameByPlatformAndTitle(title , platformId);
+  return game;
+}
+
+export async function createGame(name:string, platformId:number){
+  const gameExist = await getGameByPlatformAndTitle(name, platformId);
+
+  if(gameExist){
     throw {message:'Este jogo já existe nesta plataforma!'};
   }
 
-  return result;
+  const game = await gamesRepository.createGame(name , platformId);
+
+  return game;
 }
 
-export async function getGames() : Promise<Game[]> {
-  return gamesRepository.getGames();
+export async function getGames(){
+  const games = await gamesRepository.getGames();
+
+  return games.map( ({id, title, platforms}) => {
+    return {
+      id,
+      title,
+      platform: platforms.name
+    };
+  } );
 }

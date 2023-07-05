@@ -1,4 +1,4 @@
-import db from '@/database/connection';
+import {db} from '@/database/connection';
 import { PGQuery, Player } from '@/protocols/protocols';
 
 export async function createPlayer(name : string) : Promise<number>{

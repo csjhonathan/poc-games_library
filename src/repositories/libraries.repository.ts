@@ -1,4 +1,4 @@
-import db from '@/database/connection';
+import {db} from '@/database/connection';
 import { PGQuery, UserLib } from '@/protocols/protocols';
 import { QueryResult } from 'pg';
 

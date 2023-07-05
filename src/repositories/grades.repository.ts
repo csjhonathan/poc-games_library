@@ -1,4 +1,4 @@
-import db from '@/database/connection';
+import {db} from '@/database/connection';
 import { Grade, PGQuery } from '@/protocols/protocols';
 
 export async function createGrade(name : string) : Promise<number>{

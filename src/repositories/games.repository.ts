@@ -1,38 +1,52 @@
-import db from '@/database/connection';
-import { Game, PGQuery } from '@/protocols/protocols';
+import {prisma} from '@/database/connection';
 
-export async function createGame(name : string, platformId : number) : Promise<number>{
+export async function createGame(title : string, platformId : number){
 
-  const query : PGQuery = {
-    text:`
-          INSERT INTO games (name, platform_id)
-          SELECT $1, $2
-          WHERE
-            NOT EXISTS (
-              SELECT *
-              FROM games
-              WHERE games.name = $1 AND platform_id = $2
-            );
-        `,
-    values : [name, platformId]
-  };
+  const game = await prisma.game.create({
+    data : {
+      title,
+      platform_id:platformId,
+    }
+  });
 
-  const {rowCount} = await db.query(query);
-
-  return rowCount;
+  return game;
 }
 
-export async function getGames() : Promise<Game[]>{
+export async function getGameByPlatformAndTitle(title:string, platformId: number) {
+  const game = await prisma.game.findFirst({
+    where: {
+      title,
+      platform_id: platformId,
+    },
+  });
 
-  const query : PGQuery = {
-    text:`
-          SELECT games.id, games.name AS name, platforms.name AS platform
-          FROM games
-          JOIN platforms ON games.platform_id = platforms.id;
-        `
-  };
+  return game;
+}
 
-  const {rows} = await db.query(query);
+export async function deleteGame(id:number){
 
-  return rows;
+  const game = await prisma.game.delete({
+    where:{
+      id
+    }
+  });
+
+  return game;
+}
+
+export async function getGames(){
+
+  const games = await prisma.game.findMany({
+    select: {
+      id: true,
+      title: true,
+      platforms: {
+        select: {
+          name: true
+        }
+      }
+    }
+  });
+
+  return games;
 }

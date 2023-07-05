@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id          Int           @id(map: "games_pk") @default(autoincrement())
+  title       String
+  platform_id Int
+  platforms   Platform     @relation(fields: [platform_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
+  users_games UserGames[]
+
+  @@map("games")
+}
+
+model Grade {
+  id          Int           @id(map: "grades_pk") @default(autoincrement())
+  name        String
+  users_games UserGames[]
+
+  @@map("grades")
+}
+
+model Library {
+  id                                              Int           @id @default(autoincrement())
+  user_id                                         Int
+  game_user_id                                    Int
+  users_games_libraries_game_user_idTousers_games UserGames   @relation("libraries_game_user_idTousers_games", fields: [game_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_libraries_games_users")
+  users                                           User         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_libraries_users")
+  users_games_users_games_library_idTolibraries   UserGames[] @relation("users_games_library_idTolibraries")
+
+  @@map("libraries")
+}
+
+model Platform {
+  id    Int     @id(map: "platforms_pk") @default(autoincrement())
+  name  String
+  games Game[]
+
+  @@map("platforms")
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar
+  email       String        @db.VarChar
+  libraries   Library[]
+  users_games UserGames[]
+
+  @@map("users")
+}
+
+model UserGames {
+  id                                            Int         @id @default(autoincrement())
+  user_id                                       Int
+  game_id                                       Int
+  library_id                                    Int
+  grade_id                                      Int?
+  libraries_libraries_game_user_idTousers_games Library[] @relation("libraries_game_user_idTousers_games")
+  games                                         Game       @relation(fields: [game_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_games_games")
+  grades                                        Grade?     @relation(fields: [grade_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_games_grades")
+  libraries_users_games_library_idTolibraries   Library   @relation("users_games_library_idTolibraries", fields: [library_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_games_libraries")
+  users                                         User       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_games_users")
+
+  @@map("users_games")
+}

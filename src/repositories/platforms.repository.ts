@@ -1,4 +1,4 @@
-import db from '@/database/connection';
+import {db} from '@/database/connection';
 import { PGQuery, Platform } from '@/protocols/protocols';
 
 export async function createPlatform(name : string) : Promise<number>{
